@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E5A45">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/app/manifest.webmanifest">
+<link rel="icon" href="/app/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/app/icon-192.png">
+<title>Baixa de Estoque</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{background:#E4DFD2;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",system-ui,sans-serif;color:#17211D;display:flex;align-items:center;justify-content:center}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer}
+input{font-family:inherit}
+#app{position:relative;width:420px;height:min(860px,calc(100dvh - 32px));background:#F2EFE7;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(23,33,29,.25),0 0 0 1px #CFC9B8;display:flex;flex-direction:column;font-size:15px;line-height:1.35}
+@media (max-width:500px){body{display:block}#app{width:100%;height:100dvh;border-radius:0;box-shadow:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}}
+.bar{flex-shrink:0;height:60px;padding:0 12px 0 8px;display:flex;align-items:center;gap:4px}
+.bar .t{flex-grow:1;min-width:0;display:flex;flex-direction:column}
+.bar .t b{font-size:18px;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.bar .t span{font-size:12px;color:#5E6A64}
+.back{width:44px;height:44px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:12px}
+.pill{flex-shrink:0;height:36px;padding:0 12px;border:0;border-radius:18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.pill i{width:8px;height:8px;border-radius:50%}
+.pill.on{background:#DCEBE4;color:#0E5A45}.pill.on i{background:#0E5A45}
+.pill.off{background:#FBEBCB;color:#7A4A00}.pill.off i{background:#D68A00}
+.body{flex-grow:1;min-height:0;display:flex;flex-direction:column}
+.scroll{flex-grow:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.foot{flex-shrink:0;padding:12px 16px 20px;border-top:1px solid #DDD8CB;background:#F2EFE7;display:flex;gap:10px}
+.btn{height:56px;border:0;border-radius:16px;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn.p{background:#0E5A45;color:#fff;flex-grow:1}
+.btn.p:disabled{background:#D5D1C5;color:#6B746F;cursor:not-allowed}
+.btn.o{background:transparent;color:#0E5A45;border:1.5px solid #0E5A45;padding:0 20px;font-size:15px}
+.card{background:#FBFAF6;border:1px solid #DDD8CB;border-radius:16px}
+.lbl{font-size:11px;font-weight:600;letter-spacing:.06em;color:#5E6A64;text-transform:uppercase}
+.mono{font-family:ui-monospace,"SF Mono",Consolas,Menlo,monospace}
+.chip{font-size:11px;font-weight:600;padding:1px 6px;border-radius:6px;background:#E8E4D8;color:#3E4A44}
+.tag{font-size:11px;font-weight:700;padding:1px 7px;border-radius:6px}
+.row{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;margin:0 0 8px;padding:12px 14px;background:#FBFAF6;border:1px solid #DDD8CB;border-radius:14px;text-align:left}
+.dot{flex-shrink:0;width:10px;height:10px;border-radius:50%}
+.fchip{height:36px;padding:0 14px;border-radius:18px;font-size:13px;font-weight:600;border:1.5px solid #B8B2A2;background:transparent}
+.fchip.a{background:#17211D;color:#fff;border-color:#17211D}
+.overlay{position:absolute;left:0;top:0;right:0;bottom:0;background:rgba(23,33,29,.55);display:flex;flex-direction:column;justify-content:flex-end;z-index:5}
+.sheet{background:#F2EFE7;border-radius:24px 24px 0 0;padding:16px 16px 20px;display:flex;flex-direction:column;gap:12px;max-height:100%;overflow-y:auto}
+.key{height:52px;border:1px solid #DDD8CB;border-radius:14px;background:#FBFAF6;font-size:22px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.ghost{height:44px;padding:0 8px;border:0;background:transparent;color:#0E5A45;font-size:14px;font-weight:600}
+.cancel{flex-shrink:0;height:54px;padding:0 22px;border:1.5px solid #B8B2A2;border-radius:14px;background:transparent;font-size:15px;font-weight:600}
+.ok{flex-grow:1;height:54px;border:0;border-radius:14px;background:#0E5A45;color:#fff;font-size:16px;font-weight:600}
+.ok:disabled{background:#D5D1C5;color:#6B746F;cursor:not-allowed}
+.inp{height:52px;padding:0 16px;border:1.5px solid #B8B2A2;border-radius:14px;background:#FBFAF6;color:#17211D;font-size:17px;width:100%;outline:none}
+.inp:focus{border-color:#0E5A45}
+button:focus-visible,input:focus-visible{outline:3px solid #F2B233;outline-offset:2px}
+svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.toast{position:absolute;left:16px;right:16px;top:64px;z-index:9;padding:12px 14px;border-radius:12px;background:#17211D;color:#fff;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast.err{background:#A8281F}
+/* leitor de câmera */
+#scanner{position:fixed;left:0;top:0;right:0;bottom:0;z-index:50;background:#0B0F0D;display:flex;flex-direction:column}
+#cam{flex-grow:1;min-height:0;width:100%;object-fit:cover;background:#0B0F0D}
+#scanner .frame{position:absolute;left:50%;top:38%;width:min(64vw,280px);height:min(64vw,280px);transform:translate(-50%,-50%);border:4px solid #F2B233;border-radius:24px;box-shadow:0 0 0 100vmax rgba(0,0,0,.35);pointer-events:none}
+#scanner .scanbar{flex-shrink:0;padding:14px 16px calc(16px + env(safe-area-inset-bottom,0px));background:#F2EFE7;display:flex;flex-direction:column;gap:10px}
+#scanHint{font-size:14px;font-weight:600;color:#17211D}
+.scanrow{display:flex;gap:10px}
+</style>
+</head>
+<body>
+<div id="app"><div style="padding:32px 24px;font-size:16px;line-height:1.5;color:#17211D">Carregando o app…<noscript><br>Este app precisa de JavaScript.</noscript></div></div>
+
+<div id="scanner" hidden>
+  <video id="cam" playsinline muted></video>
+  <div class="frame"></div>
+  <div class="scanbar">
+    <div id="scanHint">Aponte para o QR Code</div>
+    <div class="scanrow">
+      <input class="inp" id="scanManual" placeholder="Ou digite o código" autocomplete="off" autocapitalize="characters" aria-label="Código digitado">
+      <button class="ok" id="scanOk" style="flex-grow:0;padding:0 22px">OK</button>
+    </div>
+    <button class="cancel" id="scanClose" style="width:100%">Fechar</button>
+  </div>
+</div>
+
+<script src="/app/vendor/jsQR.js"></script>
+<script src="/app/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "Baixa de Estoque",
+  "short_name": "Estoque",
+  "description": "Baixa de estoque por QR Code com assinatura digital e modo offline",
+  "start_url": "/app/",
+  "scope": "/app/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F2EFE7",
+  "theme_color": "#0E5A45",
+  "icons": [
+    { "src": "/app/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/app/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/app/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

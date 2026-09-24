@@ -1,0 +1,24 @@
+{
+  "name": "estoque-api",
+  "version": "0.1.0",
+  "description": "Servidor de baixa de estoque via QR Code: ME, assinaturas e fechamento diário por e-mail",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20.12"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "migrate": "node scripts/migrate.js",
+    "seed": "node scripts/seed.js",
+    "test": "node --test --test-concurrency=1 \"test/*.test.js\""
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "fastify": "^5.2.0",
+    "nodemailer": "^6.9.16",
+    "pg": "^8.13.1",
+    "zod": "^3.24.1"
+  }
+}
